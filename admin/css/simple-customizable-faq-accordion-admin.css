@@ -1,0 +1,21 @@
+#customize-control-mk_faq_text_size,
+#customize-control-mk_faq_title_size {
+    margin-bottom: 0;
+}
+
+#_customize-input-mk_faq_text_size_display,
+#_customize-input-mk_faq_title_size_display:focus,
+#_customize-input-mk_faq_title_size_display {
+    width: 10%;
+    border: none;
+    outline: none;
+    padding: 0 4px;
+}
+
+.post-type-mk-simple-faq .notice.notice-success.is-dismissible {
+    background: #00a32a26;
+}
+
+.post-type-mk-simple-faq .notice.notice-success.is-dismissible span {
+    font-weight: 600;
+}
