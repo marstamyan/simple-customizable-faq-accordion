@@ -68,6 +68,10 @@
 a.mk-faq-accordion-title {
     outline: none;
     text-decoration: none !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-direction: row-reverse;
 }
 
 dt a.mk-faq-accordion-title:hover,
@@ -101,11 +105,11 @@ dt a.mk-faq-accordion-title:visited {
     transition: background-color 0.5s ease-in-out;
     border-bottom: var(--mk-faq-title-border-width) solid var(--mk-faq-title-border-color);
 }
+
 .mk-faq-accordion-title:before,
 .mk-faq-accordion__Heading:before {
     content: "+";
     font-size: 24px;
-    line-height: 36px;
     float: right;
     -webkit-transition: -webkit-transform 0.3s ease-in-out;
     transition: -webkit-transform 0.3s ease-in-out;
@@ -113,6 +117,7 @@ dt a.mk-faq-accordion-title:visited {
     transition: transform 0.3s ease-in-out;
     transition: transform 0.3s ease-in-out, -webkit-transform 0.3s ease-in-out;
 }
+
 .mk-faq-accordion-title:hover,
 .mk-faq-accordion__Heading:hover {
     background-color: var(--mk-faq-title-hover-color);
@@ -122,6 +127,7 @@ dt a.mk-faq-accordion-title:visited {
 .mk-faq-accordionTitle.is-expanded {
     background-color: var(--mk-faq-title-hover-color);
 }
+
 .mk-faq-accordionTitleActive:before,
 .mk-faq-accordionTitle.is-expanded:before {
     -webkit-transform: rotate(-225deg);
