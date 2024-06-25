@@ -33,7 +33,6 @@ if ( ! class_exists( 'SimpleCustomizableFAQAccordion' ) ) {
 			require_once( MK_PLUGIN_PATH . 'includes/mk-simple-faq-shortcode.php' );
 			require_once( MK_PLUGIN_PATH . 'includes/mk-simple-faq-customization.php' );
 
-			add_action( 'carbon_fields_register_fields', 'crb_attach_theme_options' );
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts_styles' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts_styles' ) );
 			add_action( 'admin_notices', array( $this, 'display_mk_simple_faq_message' ) );
