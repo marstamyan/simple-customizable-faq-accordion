@@ -34,6 +34,8 @@ $mk_faq_text_size = get_theme_mod( 'mk_faq_text_size', '16' );
     color: <?php echo $mk_faq_title_color; ?>;
 }
 
+dt a.mk-faq-accordion-title:not(.is-expanded),
+dt a.mk-faq-accordion-title.is-expanded,
 dt a.mk-faq-accordion-title:hover,
 dt a.mk-faq-accordion-title:focus,
 dt a.mk-faq-accordion-title:active,

@@ -74,6 +74,8 @@ a.mk-faq-accordion-title {
     flex-direction: row-reverse;
 }
 
+dt a.mk-faq-accordion-title:not(.is-expanded),
+dt a.mk-faq-accordion-title.is-expanded,
 dt a.mk-faq-accordion-title:hover,
 dt a.mk-faq-accordion-title:focus,
 dt a.mk-faq-accordion-title:active,
