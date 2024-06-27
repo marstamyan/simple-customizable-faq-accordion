@@ -99,7 +99,7 @@ dt a.mk-faq-accordion-title:visited {
 }
 
 .mk-faq-accordion a.mk-faq-accordion-title:focus {
-    background-color: var(--mk-faq-title-background-color);
+    background-color: var(--mk-faq-title-background-color) !important;
 }
 
 .mk-faq-accordion-title,
