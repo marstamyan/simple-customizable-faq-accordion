@@ -94,6 +94,14 @@ dt a.mk-faq-accordion-title:visited {
     line-height: 1.4;
 }
 
+.mk-faq-accordion-content.mk-faq-accordionItem {
+    padding: 0;
+}
+
+.mk-faq-accordion a.mk-faq-accordion-title:focus {
+    background-color: var(--mk-faq-title-background-color);
+}
+
 .mk-faq-accordion-title,
 .mk-faq-accordion__Heading {
     background-color: var(--mk-faq-title-background-color);

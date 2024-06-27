@@ -15,6 +15,7 @@ $mk_faq_block_size = get_theme_mod( 'mk_faq_block_size', '320' );
 
 ?>
 
+.mk-faq-accordion a.mk-faq-accordion-title:focus,
 .mk-faq-accordionTitleActive, .mk-faq-accordionTitle.is-expanded,
 .mk-faq-accordion-title {
     background-color: <?php echo $title_background_color; ?>;
