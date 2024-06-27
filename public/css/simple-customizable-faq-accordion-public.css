@@ -91,6 +91,7 @@ dt a.mk-faq-accordion-title:visited {
 .mk-faq-accordion-content p {
     margin: 0;
     color: var(--mk-faq-text-color);
+    line-height: 1.4;
 }
 
 .mk-faq-accordion-title,

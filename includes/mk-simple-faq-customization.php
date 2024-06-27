@@ -145,6 +145,35 @@ function mk_simple_faq_customization( $wp_customize ) {
 		'settings' => 'mk_faq_border_line',
 	) ) );
 
+	// FAQ block size
+	$wp_customize->add_setting( 'mk_faq_block_size', array(
+		'default'           => '480',
+		'transport'         => 'postMessage',
+		'sanitize_callback' => 'sanitize_text_field',
+	) );
+
+	$wp_customize->add_control( new WP_Customize_Control( $wp_customize, 'mk_faq_block_size', array(
+		'label'       => esc_html__( 'FAQ block size', MK_FAQ_TEXT_DOMAIN ),
+		'section'     => 'mk_faq_section',
+		'settings'    => 'mk_faq_block_size',
+		'type'        => 'range',
+		'input_attrs' => array(
+			'min'  => 320,
+			'max'  => 1200,
+			'step' => 10,
+		),
+	) ) );
+
+	$wp_customize->add_control( new WP_Customize_Control( $wp_customize, 'mk_faq_block_size_display', array(
+		'label'       => '',
+		'section'     => 'mk_faq_section',
+		'settings'    => 'mk_faq_block_size',
+		'type'        => 'text',
+		'input_attrs' => array(
+			'readonly' => 'readonly',
+		),
+	) ) );
+
 	// pen
 	$wp_customize->add_setting( 'mk_faq_customize_trigger', array(
 		'transport'         => 'postMessage',

@@ -57,5 +57,11 @@
         });
     });
 
+    wp.customize('mk_faq_block_size', function (value) {
+        value.bind(function (value) {
+            $('.mk-faq-container').css('max-width', value + 'px');
+        });
+    });
+
 })(jQuery);
 

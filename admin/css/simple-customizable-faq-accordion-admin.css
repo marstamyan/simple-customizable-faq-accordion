@@ -1,8 +1,10 @@
 #customize-control-mk_faq_text_size,
+#customize-control-mk_faq_block_size,
 #customize-control-mk_faq_title_size {
     margin-bottom: 0;
 }
 
+#_customize-input-mk_faq_block_size_display,
 #_customize-input-mk_faq_text_size_display,
 #_customize-input-mk_faq_title_size_display:focus,
 #_customize-input-mk_faq_title_size_display {
@@ -10,6 +12,10 @@
     border: none;
     outline: none;
     padding: 0 4px;
+}
+
+#_customize-input-mk_faq_block_size_display {
+    width: 20%;
 }
 
 .post-type-mk-simple-faq .notice.notice-success.is-dismissible {

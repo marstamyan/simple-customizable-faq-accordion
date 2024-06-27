@@ -11,6 +11,7 @@ $mk_faq_text_color = get_theme_mod( 'mk_faq_text_color', '#0f0f0f' );
 $mk_faq_border_line = get_theme_mod( 'mk_faq_border_line', '#2caf5d' );
 $mk_faq_title_size = get_theme_mod( 'mk_faq_title_size', '18' );
 $mk_faq_text_size = get_theme_mod( 'mk_faq_text_size', '16' );
+$mk_faq_block_size = get_theme_mod( 'mk_faq_block_size', '320' );
 
 ?>
 
@@ -54,4 +55,8 @@ a.mk-faq-accordion-title {
 
 .mk-faq-accordion dd, .mk-faq-accordion__panel {
     font-size: <?php echo $mk_faq_text_size; ?>px;
+}
+
+.mk-faq-container {
+    max-width: <?php echo $mk_faq_block_size; ?>px;
 }
