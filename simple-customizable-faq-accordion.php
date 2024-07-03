@@ -2,7 +2,7 @@
 
 /**
  * Plugin Name:       Simple Customizable FAQ Accordion
- * Plugin URI:        https://mamikonars.github.io/personal/
+ * Plugin URI:        https://github.com/marstamyan/simple-customizable-faq-accordion
  * Description:       Simple Customizable FAQ Accordion - an easy and convenient solution for creating a Frequently Asked Questions section on your WordPress website. Customize styles and accordion lists for optimal display of your answers. Enhance user experience and make navigation through your FAQ more intuitive with this plugin.
  * Version:           1.0.0
  * Author:            Mamikon
