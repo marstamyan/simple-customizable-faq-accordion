@@ -165,15 +165,8 @@ function mk_simple_faq_customization( $wp_customize ) {
 		) ) );
 	}
 
-	// Keep an edit shortcut without replacing FAQ content with an empty partial.
-	if ( isset( $wp_customize->selective_refresh ) ) {
-		$wp_customize->selective_refresh->add_partial( 'mk_faq_customize_trigger_partial', array(
-			'selector'         => '.mk-faq-container',
-			'settings'         => array( 'mk_faq_title_background_color' ),
-			'render_callback'  => '__return_false',
-			'fallback_refresh' => false,
-		) );
-	}
+	// The preview script supplies its own shortcut, including on themes without
+	// customize-selective-refresh-widgets support. No partial replaces FAQ markup.
 }
 
 add_action( 'customize_register', 'mk_simple_faq_customization' );

@@ -119,10 +119,7 @@ try {
 		mk_faq_test_same( 'postMessage', $manager->settings[ $id ]['transport'], 'Setting uses live preview: ' . $id );
 		mk_faq_test_same( 'theme_mod', $manager->settings[ $id ]['type'], 'Existing theme modifications stay compatible: ' . $id );
 	}
-	$partial = $manager->selective_refresh->partials['mk_faq_customize_trigger_partial'];
-	mk_faq_test_same( '.mk-faq-container', $partial['selector'], 'Edit shortcut supports multiple FAQ instances' );
-	mk_faq_test_same( '__return_false', $partial['render_callback'], 'Edit shortcut never replaces answers with an empty string' );
-	mk_faq_test_same( false, $partial['fallback_refresh'], 'Style shortcut does not reload the preview' );
+	mk_faq_test_same( false, isset( $manager->selective_refresh->partials['mk_faq_customize_trigger_partial'] ), 'Preview supplies a shortcut without replacing FAQ markup' );
 
 	$mk_faq_test_mods = array(
 		'mk_faq_title_color' => '#abc',

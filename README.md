@@ -30,11 +30,19 @@ Only published FAQ groups are displayed. Password-protected groups are hidden un
 
 ## Appearance
 
-Open **FAQ → Help → Open FAQ customization** (or **Appearance → Customize**) and select **FAQ Customization**. View a page containing a FAQ in the preview, then change colors, font sizes and maximum width. This also works with block themes through the Help link.
+Open **FAQ → Settings** to change colors, font sizes and maximum width directly in the admin area, then save. Alternatively, open **FAQ → Help → Open FAQ customization** and select **FAQ Customization**, or click the pencil on a FAQ in its preview.
+
+Both interfaces edit the same settings for the active theme: there are no separate admin and Customizer overrides. Reload an already open Customizer after saving in the admin area so an older unsaved draft is not published over the new values.
+
+Live preview applies design variables directly to FAQ containers, including FAQ markup added later. The pencil does not require selective-refresh support from the theme. LiteSpeed page optimization is disabled for Customizer preview requests only. After upgrading, clear LiteSpeed's cache once to remove older optimized assets.
+
+Custom themes must call `wp_head()` before `</head>` and `wp_footer()` before `</body>`. WordPress itself prints the Customizer's connection settings in the footer; missing theme hooks can prevent the entire preview connection from initializing. FAQ → Settings remains available without using the Customizer.
 
 Appearance settings belong to the active theme, matching the original plugin. Switching themes uses that theme's settings. Existing setting and FAQ data keys have been preserved. The default question text is now dark for better contrast on the green background; explicitly saved colors remain unchanged.
 
 ## Development and testing
+
+Version 1.2.0 passed 28 WordPress integration checks, 26 shortcode checks and 13 browser scenarios on WordPress 7.1.4 / PHP 8.3.36. New scenarios verify admin saves, invalid nonce rejection, settings shared with the Customizer, the edit pencil and live changes despite a later conflicting stylesheet. The PHP debug log and uncaught JavaScript error list were empty.
 
 Version 1.1.0 was tested on WordPress **7.1.4**, PHP **8.3.36**, SQLite and Microsoft Edge: 28 integration checks, 26 shortcode checks and 12 browser scenarios passed, including actual admin form saving and Customizer live preview/publication. The PHP debug log was empty. PHP syntax was also checked on PHP 7.4.
 
@@ -47,7 +55,7 @@ Dependencies are locked in `composer.lock`. To refresh the bundled production li
 To build an installable package on Windows:
 
 ```powershell
-./tools/build-plugin.ps1 -Destination ../outputs/simple-customizable-faq-accordion-1.1.0.zip
+./tools/build-plugin.ps1 -Destination ../outputs/simple-customizable-faq-accordion-1.2.0.zip
 ```
 
 ## Support and license

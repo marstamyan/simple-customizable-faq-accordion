@@ -28,7 +28,10 @@ try {
     vm.runInNewContext(code, {
         window: { wp },
         wp,
+        MutationObserver: class { observe() {} },
         document: {
+            documentElement: {},
+            querySelectorAll() { return []; },
             head: { appendChild(element) { style = element; ++appended; } },
             createElement(tag) {
                 assert.equal(tag, 'style');

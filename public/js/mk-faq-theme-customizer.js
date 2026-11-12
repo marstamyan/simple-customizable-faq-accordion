@@ -37,6 +37,27 @@
         });
         // A stylesheet also updates newly rendered FAQ instances in the preview.
         style.textContent = '.mk-faq-container{' + declarations.join('') + '}';
+        document.querySelectorAll('.mk-faq-container').forEach(function (container) {
+            Object.keys(values).forEach(function (id) {
+                // Optimizers may move the saved stylesheet after the preview style.
+                container.style.setProperty(settings[id].property, values[id], 'important');
+            });
+            if (!container.querySelector('.mk-faq-edit-shortcut')) {
+                var edit = document.createElement('button');
+                edit.type = 'button';
+                edit.className = 'mk-faq-edit-shortcut';
+                edit.textContent = '\u270e';
+                edit.setAttribute('aria-label', 'Edit FAQ appearance');
+                edit.style.cssText = 'position:absolute;right:0;top:0;z-index:10;background:#0073aa;color:white;border:2px solid white;border-radius:50%;width:32px;height:32px;padding:0;cursor:pointer;font:24px/28px sans-serif;';
+                container.style.position = 'relative';
+                edit.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    wp.customize.preview.send('mk-faq-focus');
+                });
+                container.appendChild(edit);
+            }
+        });
     }
 
     Object.keys(settings).forEach(function (id) {
@@ -49,4 +70,14 @@
             });
         });
     });
+    // FAQ markup can arrive after this script (lazy loading or selective refresh).
+    new MutationObserver(function (records) {
+        if (records.some(function (record) {
+            return Array.prototype.some.call(record.addedNodes, function (node) {
+                return node.nodeType === 1 && (node.matches('.mk-faq-container') || node.querySelector('.mk-faq-container'));
+            });
+        })) {
+            render();
+        }
+    }).observe(document.documentElement, { childList: true, subtree: true });
 }());

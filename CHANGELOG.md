@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.2.0
+
+- Add FAQ → Settings for all nine design options, sharing the existing theme mods and sanitizers with the Customizer.
+- Protect admin saves with capability and nonce checks.
+- Apply preview variables directly to containers so reordered stylesheets cannot override live edits; handle dynamically added FAQ markup.
+- Supply a keyboard-accessible pencil and controls message independently of theme selective-refresh support.
+- Disable LiteSpeed optimization for Customizer preview requests only.
+- Add browser regressions for the pencil, late stylesheets, shared admin/Customizer saves and rejected invalid nonces.
+
 ## 1.1.0
 
 - Fix the fatal Customizer callback and load live preview code only in Customizer previews.

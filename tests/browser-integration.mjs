@@ -165,11 +165,33 @@ try {
     assert.equal(await page.locator('.mk-faq-heading-title').count(), 0);
     assert.equal(await page.locator('.mk-faq-accordion-title').first().innerText(), 'Edited through the admin form');
   });
-  await browserCheck('Customizer updates live preview and persists colors and font size', async () => {
+  await browserCheck('Admin settings save into the same design values used by the Customizer', async () => {
+    await page.goto(server.serverUrl + '/wp-admin/edit.php?post_type=mk-simple-faq&page=mk-faq-settings', { waitUntil: 'domcontentloaded' });
+    await page.locator('#mk_faq_title_color').fill('#112233');
+    await page.locator('#mk_faq_title_size').fill('26');
+    await Promise.all([page.waitForNavigation({ waitUntil: 'domcontentloaded' }), page.locator('#submit').click()]);
+    assert.equal(await page.locator('#mk_faq_title_color').inputValue(), '#112233');
+    assert.equal(await page.locator('#mk_faq_title_size').inputValue(), '26');
+    const denied = await page.request.post(server.serverUrl + '/wp-admin/admin-post.php', { form: { action: 'mk_faq_save_design', _wpnonce: 'invalid', 'mk_faq_design[mk_faq_title_size]': '45' } });
+    assert.equal(denied.status(), 403);
+  });
+  await browserCheck('Customizer pencil works and live preview survives late stylesheets', async () => {
+    await page.setViewportSize({ width: 1280, height: 900 });
     const url = new URL('/wp-admin/customize.php', server.serverUrl);
     url.searchParams.set('url', results.integration.fixture_url);
     url.searchParams.set('autofocus[section]', 'mk_faq_section');
     await page.goto(url.href, { waitUntil: 'domcontentloaded' });
+    const preview = page.frameLocator('#customize-preview iframe');
+    await preview.locator('.mk-faq-edit-shortcut').first().waitFor();
+    assert.equal(await page.locator('#customize-control-mk_faq_title_size input[type="range"]').inputValue(), '26');
+    await page.evaluate(() => wp.customize.section('mk_faq_section').collapse());
+    await preview.locator('.mk-faq-edit-shortcut').first().click();
+    await page.waitForFunction(() => wp.customize.section('mk_faq_section').expanded());
+    await preview.locator('body').evaluate(() => {
+      const lateStyle = document.createElement('style');
+      lateStyle.textContent = '.mk-faq-container{--mk-faq-title-color:#ffffff!important;--mk-faq-title-font-size:13px!important}';
+      document.head.appendChild(lateStyle);
+    });
     const colorControl = page.locator('#customize-control-mk_faq_title_color');
     await colorControl.locator('.wp-color-result').click();
     const color = colorControl.locator('input.color-picker-hex');
@@ -182,7 +204,6 @@ try {
       input.dispatchEvent(new Event('input', { bubbles: true }));
       input.dispatchEvent(new Event('change', { bubbles: true }));
     });
-    const preview = page.frameLocator('#customize-preview iframe');
     const previewButton = preview.locator('.mk-faq-accordion-title').first();
     await previewButton.waitFor();
     await page.waitForFunction(() => {
@@ -195,6 +216,9 @@ try {
     await page.goto(results.integration.fixture_url, { waitUntil: 'networkidle' });
     const computed = await page.locator('.mk-faq-accordion-title').first().evaluate(button => ({ color: getComputedStyle(button).color, fontSize: getComputedStyle(button).fontSize }));
     assert.deepEqual(computed, { color: 'rgb(18, 52, 86)', fontSize: '28px' });
+    await page.goto(server.serverUrl + '/wp-admin/edit.php?post_type=mk-simple-faq&page=mk-faq-settings', { waitUntil: 'domcontentloaded' });
+    assert.equal(await page.locator('#mk_faq_title_color').inputValue(), '#123456');
+    assert.equal(await page.locator('#mk_faq_title_size').inputValue(), '28');
   });
   const debugLog = await server.playground.fileExists('/wordpress/wp-content/debug.log')
     ? await server.playground.readFileAsText('/wordpress/wp-content/debug.log') : '';

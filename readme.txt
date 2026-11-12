@@ -3,7 +3,7 @@ Contributors: marstamyan
 Tags: faq, accordion, shortcode
 Requires at least: 6.0
 Requires PHP: 7.4
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -31,13 +31,19 @@ Each question supports mouse, touch and keyboard controls. Multiple groups can s
 
 = Where are the design settings? =
 
-Open FAQ → Help → Open FAQ customization, then FAQ Customization. Design settings are stored for the active theme.
+Open FAQ → Settings to edit and save the design in the admin area, or FAQ → Help → Open FAQ customization for live preview. Both interfaces use the same settings, stored for the active theme.
 
 = Will updating delete existing questions? =
 
 No. Version 1.1.0 retains the existing FAQ post type, Carbon Fields field names and theme modification names. Back up the site before any plugin update.
 
 == Changelog ==
+
+= 1.2.0 =
+* Add FAQ → Settings using the same validated theme settings as the Customizer.
+* Apply live preview values directly to FAQ containers to withstand reordered stylesheets.
+* Add a preview pencil independent of theme selective-refresh support.
+* Disable LiteSpeed page optimization inside Customizer previews only.
 
 = 1.1.0 =
 * Fix Customizer initialization and WordPress installations in a subdirectory.
