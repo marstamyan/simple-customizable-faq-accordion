@@ -12,6 +12,10 @@ A WordPress plugin for creating FAQ groups and displaying them as keyboard-acces
 
 Upload the complete `simple-customizable-faq-accordion` ZIP through **Plugins → Add New → Upload Plugin**, then activate it. A package must include the `vendor` directory. If checking out source without bundled dependencies, run `composer install --no-dev --prefer-dist --no-interaction` in this directory before activation.
 
+If downloading GitHub's **Code → Download ZIP**, extract the archive and rename its top-level folder (for example, `simple-customizable-faq-accordion-main`) to `simple-customizable-faq-accordion`. Upload that folder to `wp-content/plugins`, or ZIP the renamed folder and upload it through WordPress. Keep this folder name when updating an existing installation.
+
+For updates from 1.0.0, see the [upgrade notes](CHANGELOG.md#upgrade-notes), especially if your theme has custom FAQ CSS.
+
 ## Usage
 
 1. Open **FAQ → Add New** and enter a title for the group.
@@ -22,9 +26,7 @@ Upload the complete `simple-customizable-faq-accordion` ZIP through **Plugins �
 
 Several FAQ groups, including repeated copies of the same group, can appear on one page. Each answer opens independently. Native buttons support mouse, touch, Enter and Space; arrow keys, Home and End move between questions. If JavaScript is unavailable, answers remain readable.
 
-Only published FAQ groups are displayed. Password-protected groups require the normal WordPress password cookie. Drafts, private posts, scheduled posts, trashed posts and other post types are not displayed.
-
-The old README incorrectly mentioned `[faq_accordion]`; the implemented shortcode is `[mk-simple-faq id="123"]`.
+Only published FAQ groups are displayed. Password-protected groups are hidden unless a matching WordPress password cookie already exists; the shortcode does not provide a password entry form. Drafts, private posts, scheduled posts, trashed posts and other post types are not displayed.
 
 ## Appearance
 
@@ -33,6 +35,10 @@ Open **FAQ → Help → Open FAQ customization** (or **Appearance → Customize*
 Appearance settings belong to the active theme, matching the original plugin. Switching themes uses that theme's settings. Existing setting and FAQ data keys have been preserved. The default question text is now dark for better contrast on the green background; explicitly saved colors remain unchanged.
 
 ## Development and testing
+
+Version 1.1.0 was tested on WordPress **7.1.4**, PHP **8.3.36**, SQLite and Microsoft Edge: 28 integration checks, 26 shortcode checks and 12 browser scenarios passed, including actual admin form saving and Customizer live preview/publication. The PHP debug log was empty. PHP syntax was also checked on PHP 7.4.
+
+This test run does not establish compatibility with every theme, other plugins, MySQL/MariaDB or all WordPress/PHP versions.
 
 See [tests/README.md](tests/README.md) for standalone checks and real WordPress/browser tests. Integration tests must use a disposable site because they create test content.
 
