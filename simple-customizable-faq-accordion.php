@@ -3,7 +3,7 @@
  * Plugin Name:       Simple Customizable FAQ Accordion
  * Plugin URI:        https://github.com/marstamyan/simple-customizable-faq-accordion
  * Description:       Create FAQ groups with accessible accordions and customizable colors and sizes.
- * Version:           1.2.0
+ * Version:           1.2.1
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Mamikon
@@ -22,7 +22,7 @@ if ( ! class_exists( 'SimpleCustomizableFAQAccordion' ) ) {
 	class SimpleCustomizableFAQAccordion {
 		public function __construct() {
 			define( 'MK_FAQ_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
-			define( 'MK_FAQ_VERSION', '1.2.0' );
+			define( 'MK_FAQ_VERSION', '1.2.1' );
 			define( 'MK_FAQ_TEXT_DOMAIN', 'simple-customizable-faq-accordion' );
 		}
 
@@ -43,6 +43,14 @@ if ( ! class_exists( 'SimpleCustomizableFAQAccordion' ) ) {
 			add_action( 'manage_mk-simple-faq_posts_custom_column', array( $this, 'display_shortcode_column_content' ), 10, 2 );
 			add_filter( 'manage_edit-mk-simple-faq_columns', array( $this, 'add_shortcode_column' ) );
 			add_filter( 'litespeed_can_optm', array( $this, 'allow_page_optimization' ) );
+			add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), array( $this, 'plugin_action_links' ) );
+		}
+
+		public function plugin_action_links( $links ) {
+			if ( current_user_can( 'edit_theme_options' ) ) {
+				array_unshift( $links, '<a href="' . esc_url( admin_url( 'edit.php?post_type=mk-simple-faq&page=mk-faq-settings' ) ) . '">' . esc_html__( 'Settings', 'simple-customizable-faq-accordion' ) . '</a>' );
+			}
+			return $links;
 		}
 
 		public function display_mk_simple_faq_message() {

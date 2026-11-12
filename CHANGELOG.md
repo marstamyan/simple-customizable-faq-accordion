@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.1
+
+- Add a Settings action link on the Installed Plugins screen for users allowed to edit FAQ design settings.
+
 ## 1.2.0
 
 - Add FAQ → Settings for all nine design options, sharing the existing theme mods and sanitizers with the Customizer.

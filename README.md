@@ -30,7 +30,7 @@ Only published FAQ groups are displayed. Password-protected groups are hidden un
 
 ## Appearance
 
-Open **FAQ → Settings** to change colors, font sizes and maximum width directly in the admin area, then save. Alternatively, open **FAQ → Help → Open FAQ customization** and select **FAQ Customization**, or click the pencil on a FAQ in its preview.
+Open **FAQ → Settings**, or click **Settings** below the plugin name on the Installed Plugins screen, to change colors, font sizes and maximum width directly in the admin area, then save. Alternatively, open **FAQ → Help → Open FAQ customization** and select **FAQ Customization**, or click the pencil on a FAQ in its preview.
 
 Both interfaces edit the same settings for the active theme: there are no separate admin and Customizer overrides. Reload an already open Customizer after saving in the admin area so an older unsaved draft is not published over the new values.
 
@@ -55,7 +55,7 @@ Dependencies are locked in `composer.lock`. To refresh the bundled production li
 To build an installable package on Windows:
 
 ```powershell
-./tools/build-plugin.ps1 -Destination ../outputs/simple-customizable-faq-accordion-1.2.0.zip
+./tools/build-plugin.ps1 -Destination ../outputs/simple-customizable-faq-accordion-1.2.1.zip
 ```
 
 ## Support and license
