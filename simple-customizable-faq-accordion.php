@@ -1,18 +1,18 @@
 <?php
-
 /**
  * Plugin Name:       Simple Customizable FAQ Accordion
  * Plugin URI:        https://github.com/marstamyan/simple-customizable-faq-accordion
- * Description:       Simple Customizable FAQ Accordion - an easy and convenient solution for creating a Frequently Asked Questions section on your WordPress website. Customize styles and accordion lists for optimal display of your answers. Enhance user experience and make navigation through your FAQ more intuitive with this plugin.
- * Version:           1.0.0
+ * Description:       Create FAQ groups with accessible accordions and customizable colors and sizes.
+ * Version:           1.1.0
+ * Requires at least: 6.0
+ * Requires PHP:      7.4
  * Author:            Mamikon
- * Author URI:        https://linkedin.com/in/mamikon-arustamyan-3969301ab?/
- * License:           GPL-2.0+
- * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
+ * Author URI:        https://linkedin.com/in/mamikon-arustamyan-3969301ab/
+ * License:           GPL-2.0-or-later
+ * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       simple-customizable-faq-accordion
  * Domain Path:       /languages
  */
-
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -21,75 +21,81 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( ! class_exists( 'SimpleCustomizableFAQAccordion' ) ) {
 	class SimpleCustomizableFAQAccordion {
 		public function __construct() {
-			define( 'MK_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
+			define( 'MK_FAQ_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
+			define( 'MK_FAQ_VERSION', '1.1.0' );
 			define( 'MK_FAQ_TEXT_DOMAIN', 'simple-customizable-faq-accordion' );
 		}
 
 		public function initialize() {
-			include_once( MK_PLUGIN_PATH . 'includes/utilities.php' );
-			include_once( MK_PLUGIN_PATH . 'includes/options-page.php' );
-			require_once( MK_PLUGIN_PATH . 'includes/register-faq-post-type.php' );
-			require_once( MK_PLUGIN_PATH . 'includes/faq-carbon-fields.php' );
-			require_once( MK_PLUGIN_PATH . 'includes/mk-simple-faq-shortcode.php' );
-			require_once( MK_PLUGIN_PATH . 'includes/mk-simple-faq-customization.php' );
+			require_once MK_FAQ_PLUGIN_PATH . 'includes/options-page.php';
+			require_once MK_FAQ_PLUGIN_PATH . 'includes/register-faq-post-type.php';
+			require_once MK_FAQ_PLUGIN_PATH . 'includes/faq-carbon-fields.php';
+			require_once MK_FAQ_PLUGIN_PATH . 'includes/mk-simple-faq-shortcode.php';
+			require_once MK_FAQ_PLUGIN_PATH . 'includes/mk-simple-faq-customization.php';
+			require_once MK_FAQ_PLUGIN_PATH . 'includes/mk-simple-faq-customization-css.php';
 
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts_styles' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts_styles' ) );
+			add_action( 'customize_controls_enqueue_scripts', array( $this, 'admin_enqueue_scripts_styles' ) );
+			add_action( 'customize_preview_init', array( $this, 'enqueue_customizer_preview' ) );
 			add_action( 'admin_notices', array( $this, 'display_mk_simple_faq_message' ) );
-			add_action( 'customize_register', array( $this, 'mk_simple_faq_customization' ) );
-
-			add_action( 'manage_mk-simple-faq_posts_custom_column', array(
-				$this,
-				'display_shortcode_column_content'
-			), 10, 2 );
-
-			add_filter( 'manage_edit-mk-simple-faq_columns', array( $this, 'custom_columns_order' ) );
+			add_action( 'manage_mk-simple-faq_posts_custom_column', array( $this, 'display_shortcode_column_content' ), 10, 2 );
 			add_filter( 'manage_edit-mk-simple-faq_columns', array( $this, 'add_shortcode_column' ) );
 		}
 
-		function display_mk_simple_faq_message() {
-			global $pagenow;
-
-			if ( $pagenow == 'post.php' && isset( $_GET['post'] ) && get_post_type( $_GET['post'] ) == 'mk-simple-faq' ) {
-				echo '<div class="notice notice-success is-dismissible"><p>Use this shortcode to display FAQ: <span>[mk-simple-faq id="' . $_GET['post'] . '"]</span></p></div>';
+		public function display_mk_simple_faq_message() {
+			$screen = get_current_screen();
+			$post   = get_post();
+			if ( ! $screen || 'post' !== $screen->base || 'mk-simple-faq' !== $screen->post_type || ! $post || ! current_user_can( 'edit_post', $post->ID ) ) {
+				return;
 			}
-		}
-
-		function add_shortcode_column( $columns ) {
-			$columns['shortcode'] = esc_html__( 'Shortcode', MK_FAQ_TEXT_DOMAIN );
-
-			return $columns;
-		}
-
-		function display_shortcode_column_content( $column_name, $post_id ) {
-			if ( $column_name === 'shortcode' ) {
-				echo '[mk-simple-faq id="' . $post_id . '"]';
-			}
-		}
-
-		function custom_columns_order( $columns ) {
-			$new_order = array(
-				'cb'        => $columns['cb'],
-				'title'     => $columns['title'],
-				'shortcode' => 'Shortcode',
-				'date'      => $columns['date']
+			printf(
+				'<div class="notice notice-info"><p>%s <code>%s</code></p></div>',
+				esc_html__( 'Use this shortcode to display this FAQ:', 'simple-customizable-faq-accordion' ),
+				esc_html( '[mk-simple-faq id="' . absint( $post->ID ) . '"]' )
 			);
+		}
 
-			return $new_order;
+		public function add_shortcode_column( $columns ) {
+			$result = array();
+			foreach ( $columns as $key => $label ) {
+				$result[ $key ] = $label;
+				if ( 'title' === $key ) {
+					$result['shortcode'] = esc_html__( 'Shortcode', 'simple-customizable-faq-accordion' );
+				}
+			}
+			if ( ! isset( $result['shortcode'] ) ) {
+				$result['shortcode'] = esc_html__( 'Shortcode', 'simple-customizable-faq-accordion' );
+			}
+			return $result;
+		}
+
+		public function display_shortcode_column_content( $column_name, $post_id ) {
+			if ( 'shortcode' === $column_name ) {
+				echo '<code>' . esc_html( '[mk-simple-faq id="' . absint( $post_id ) . '"]' ) . '</code>';
+			}
 		}
 
 		public function admin_enqueue_scripts_styles() {
-			wp_enqueue_style( 'mk-faq-admin-styles', plugins_url( '/admin/css/simple-customizable-faq-accordion-admin.css', __FILE__ ), array(), '1.0.0' );
+			$screen = get_current_screen();
+			if ( ! $screen || ( 'mk-simple-faq' !== $screen->post_type && 'customize' !== $screen->base ) ) {
+				return;
+			}
+			wp_enqueue_style( 'mk-faq-admin-styles', plugins_url( 'admin/css/simple-customizable-faq-accordion-admin.css', __FILE__ ), array(), MK_FAQ_VERSION );
 		}
+
 		public function enqueue_scripts_styles() {
-			wp_enqueue_style( 'mk-faq-public-styles', plugins_url( '/public/css/simple-customizable-faq-accordion-public.css', __FILE__ ), array(), '1.0.0' );
-			wp_enqueue_style( 'mk-faq-customizer-styles', plugins_url( '/includes/mk-simple-faq-customization-css.php', __FILE__ ), array(), '0.1.0', 'all' );
-			wp_enqueue_script('mk-faq-theme-customizer', plugins_url( '/public/js/mk-faq-theme-customizer.js', __FILE__ ), array( 'jquery', 'customize-preview' ),'1.0.0',true );
-			wp_enqueue_script( 'mk-faq-scripts', plugins_url( '/public/js/simple-customizable-faq-accordion-public.js', __FILE__ ), array(), '1.0.0', true );
+			// Load here so shortcodes in widgets and template parts also have styles in the head.
+			wp_enqueue_style( 'mk-faq-public-styles', plugins_url( 'public/css/simple-customizable-faq-accordion-public.css', __FILE__ ), array(), MK_FAQ_VERSION );
+			wp_add_inline_style( 'mk-faq-public-styles', mk_simple_faq_customization_css() );
+			wp_enqueue_script( 'mk-faq-scripts', plugins_url( 'public/js/simple-customizable-faq-accordion-public.js', __FILE__ ), array(), MK_FAQ_VERSION, true );
+		}
+
+		public function enqueue_customizer_preview() {
+			wp_enqueue_script( 'mk-faq-theme-customizer', plugins_url( 'public/js/mk-faq-theme-customizer.js', __FILE__ ), array( 'customize-preview' ), MK_FAQ_VERSION, true );
 		}
 	}
 
-	$MkSimpleFAQ = new SimpleCustomizableFAQAccordion;
+	$MkSimpleFAQ = new SimpleCustomizableFAQAccordion();
 	$MkSimpleFAQ->initialize();
-
 }

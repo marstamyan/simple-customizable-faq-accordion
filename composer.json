@@ -1,5 +1,17 @@
 {
+    "name": "marstamyan/simple-customizable-faq-accordion",
+    "description": "A customizable FAQ accordion for WordPress.",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
     "require": {
-        "htmlburger/carbon-fields-plugin": "^3.6"
+        "php": ">=7.4",
+        "htmlburger/carbon-fields": "^3.6.11"
+    },
+    "config": {
+        "allow-plugins": false,
+        "platform": {
+            "php": "7.4.33"
+        },
+        "sort-packages": true
     }
 }

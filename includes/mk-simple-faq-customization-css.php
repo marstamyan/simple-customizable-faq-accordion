@@ -1,63 +1,29 @@
 <?php
-header( "Content-type: text/css" );
+/**
+ * Generate safe inline styles after WordPress has loaded.
+ *
+ * This file is deliberately not a standalone CSS endpoint: WordPress can live
+ * in a subdirectory and must not be bootstrapped from DOCUMENT_ROOT here.
+ */
 
-require_once( rtrim( $_SERVER['DOCUMENT_ROOT'], '/' ) . '/wp-load.php' );
-
-$title_background_color = get_theme_mod( 'mk_faq_title_background_color', '#38cc70' );
-$faq_title_background_color_hover = get_theme_mod( 'mk_faq_title_background_color_hover', '#2ba659' );
-$faq_text_background_color = get_theme_mod( 'mk_faq_text_background_color', '#fff' );
-$mk_faq_title_color = get_theme_mod( 'mk_faq_title_color', '#fff' );
-$mk_faq_text_color = get_theme_mod( 'mk_faq_text_color', '#0f0f0f' );
-$mk_faq_border_line = get_theme_mod( 'mk_faq_border_line', '#2caf5d' );
-$mk_faq_title_size = get_theme_mod( 'mk_faq_title_size', '18' );
-$mk_faq_text_size = get_theme_mod( 'mk_faq_text_size', '16' );
-$mk_faq_block_size = get_theme_mod( 'mk_faq_block_size', '320' );
-
-?>
-
-.mk-faq-accordion a.mk-faq-accordion-title:focus,
-.mk-faq-accordionTitleActive, .mk-faq-accordionTitle.is-expanded,
-.mk-faq-accordion-title {
-    background-color: <?php echo $title_background_color; ?> !important;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
 
-.mk-faq-accordion-title:hover {
-    background-color: <?php echo $faq_title_background_color_hover; ?>;
-}
+/**
+ * Return the plugin's scoped CSS custom properties for wp_add_inline_style().
+ *
+ * @return string
+ */
+function mk_simple_faq_customization_css() {
+	$declarations = array();
+	foreach ( mk_simple_faq_customizer_settings() as $id => $setting ) {
+		$value = mk_simple_faq_sanitize_design_value( get_theme_mod( $id, $setting['default'] ), $id );
+		if ( 'range' === $setting['type'] ) {
+			$value .= 'px';
+		}
+		$declarations[] = $setting['property'] . ':' . $value . ';';
+	}
 
-.mk-faq-accordion,
-.mk-faq-accordion dd, .mk-faq-accordion__panel,
-.mk-faq-accordion dd, .mk-faq-accordion__panel p{
-    background-color: <?php echo $faq_text_background_color; ?>;
-}
-
-.mk-faq-accordion-title, .mk-faq-accordion__Heading {
-    border-bottom: 1px solid <?php echo $mk_faq_border_line; ?>;
-    color: <?php echo $mk_faq_title_color; ?>;
-}
-
-dt a.mk-faq-accordion-title:not(.is-expanded),
-dt a.mk-faq-accordion-title.is-expanded,
-dt a.mk-faq-accordion-title:hover,
-dt a.mk-faq-accordion-title:focus,
-dt a.mk-faq-accordion-title:active,
-dt a.mk-faq-accordion-title:visited {
-    color: <?php echo $mk_faq_title_color; ?>;
-    text-decoration: none;
-}
-
-.mk-faq-accordion-content p {
-    color: <?php echo $mk_faq_text_color; ?>;
-}
-
-a.mk-faq-accordion-title {
-    font-size: <?php echo $mk_faq_title_size; ?>px;
-}
-
-.mk-faq-accordion dd, .mk-faq-accordion__panel {
-    font-size: <?php echo $mk_faq_text_size; ?>px;
-}
-
-.mk-faq-container {
-    max-width: <?php echo $mk_faq_block_size; ?>px;
+	return '.mk-faq-container{' . implode( '', $declarations ) . '}';
 }

@@ -1,67 +1,52 @@
-(function ($) {
-    "use strict";
+(function () {
+    'use strict';
 
-    wp.customize('mk_faq_title_background_color', function (value) {
-        value.bind(function (value) {
-            $('.mk-faq-accordion-title').css('background-color', value);
+    if (!window.wp || !wp.customize) {
+        return;
+    }
+
+    var settings = {
+        mk_faq_title_background_color: { property: '--mk-faq-title-background-color', fallback: '#38cc70' },
+        mk_faq_title_background_color_hover: { property: '--mk-faq-title-hover-color', fallback: '#2ba659' },
+        mk_faq_text_background_color: { property: '--mk-faq-background-color', fallback: '#ffffff' },
+        mk_faq_title_color: { property: '--mk-faq-title-color', fallback: '#0f0f0f' },
+        mk_faq_text_color: { property: '--mk-faq-text-color', fallback: '#0f0f0f' },
+        mk_faq_border_line: { property: '--mk-faq-title-border-color', fallback: '#2caf5d' },
+        mk_faq_title_size: { property: '--mk-faq-title-font-size', fallback: 18, min: 12, max: 48 },
+        mk_faq_text_size: { property: '--mk-faq-text-font-size', fallback: 16, min: 12, max: 48 },
+        mk_faq_block_size: { property: '--mk-faq-accordion-max-width', fallback: 480, min: 320, max: 1200 }
+    };
+    var values = {};
+    var style = document.createElement('style');
+    style.id = 'mk-faq-customizer-preview';
+    document.head.appendChild(style);
+
+    function sanitize(value, setting) {
+        if (typeof setting.min === 'number') {
+            if (!/^-?\d+$/.test(String(value))) {
+                value = setting.fallback;
+            }
+            return Math.min(setting.max, Math.max(setting.min, Number(value))) + 'px';
+        }
+        return typeof value === 'string' && /^#(?:[a-f0-9]{3}|[a-f0-9]{6})$/i.test(value) ? value : setting.fallback;
+    }
+
+    function render() {
+        var declarations = Object.keys(values).map(function (id) {
+            return settings[id].property + ':' + values[id] + ';';
+        });
+        // A stylesheet also updates newly rendered FAQ instances in the preview.
+        style.textContent = '.mk-faq-container{' + declarations.join('') + '}';
+    }
+
+    Object.keys(settings).forEach(function (id) {
+        wp.customize(id, function (setting) {
+            values[id] = sanitize(setting.get(), settings[id]);
+            render();
+            setting.bind(function (value) {
+                values[id] = sanitize(value, settings[id]);
+                render();
+            });
         });
     });
-
-    wp.customize('mk_faq_title_background_color_hover', function (value) {
-        value.bind(function (new_val) {
-            var old_faq_title_bg_color = $('.mk-faq-accordion-title').css('background-color');
-            $('.mk-faq-accordion-title').hover(
-                function () {
-                    $(this).css('background-color', new_val);
-                },
-                function () {
-                    $(this).css('background-color', old_faq_title_bg_color);
-                }
-            );
-        });
-    });
-
-    wp.customize('mk_faq_text_background_color', function (value) {
-        value.bind(function (value) {
-            $('.mk-faq-accordion-content p').css('background-color', value);
-        });
-    });
-
-    wp.customize('mk_faq_title_color', function (value) {
-        value.bind(function (value) {
-            $('.mk-faq-accordion-title').css('color', value);
-        });
-    });
-
-    wp.customize('mk_faq_border_line', function (value) {
-        value.bind(function (value) {
-            $('.mk-faq-accordion-title, .mk-faq-accordion__Heading').css('border-bottom', '1px solid' + value);
-        });
-    });
-
-    wp.customize('mk_faq_text_color', function (value) {
-        value.bind(function (value) {
-            $('.mk-faq-accordion-content p').css('color', value);
-        });
-    });
-
-    wp.customize('mk_faq_title_size', function (value) {
-        value.bind(function (value) {
-            $('a.mk-faq-accordion-title').css('font-size', value + 'px');
-        });
-    });
-
-    wp.customize('mk_faq_text_size', function (value) {
-        value.bind(function (value) {
-            $('.mk-faq-accordion dd, .mk-faq-accordion__panel').css('font-size', value + 'px');
-        });
-    });
-
-    wp.customize('mk_faq_block_size', function (value) {
-        value.bind(function (value) {
-            $('.mk-faq-container').css('max-width', value + 'px');
-        });
-    });
-
-})(jQuery);
-
+}());

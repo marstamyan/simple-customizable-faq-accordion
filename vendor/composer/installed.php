@@ -1,51 +1,32 @@
-<?php return array (
-  'root' => 
-  array (
-    'pretty_version' => '1.0.0+no-version-set',
-    'version' => '1.0.0.0',
-    'aliases' => 
-    array (
+<?php return array(
+    'root' => array(
+        'name' => 'marstamyan/simple-customizable-faq-accordion',
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => 'b9794ce05a97db6b6a5efc3daadc9a5911f7784b',
+        'type' => 'wordpress-plugin',
+        'install_path' => __DIR__ . '/../../',
+        'aliases' => array(),
+        'dev' => false,
     ),
-    'reference' => NULL,
-    'name' => '__root__',
-  ),
-  'versions' => 
-  array (
-    '__root__' => 
-    array (
-      'pretty_version' => '1.0.0+no-version-set',
-      'version' => '1.0.0.0',
-      'aliases' => 
-      array (
-      ),
-      'reference' => NULL,
+    'versions' => array(
+        'htmlburger/carbon-fields' => array(
+            'pretty_version' => 'v3.6.11',
+            'version' => '3.6.11.0',
+            'reference' => 'd040371b5dbdc874aeef8f517045a0e82cedea8c',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../htmlburger/carbon-fields',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'marstamyan/simple-customizable-faq-accordion' => array(
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => 'b9794ce05a97db6b6a5efc3daadc9a5911f7784b',
+            'type' => 'wordpress-plugin',
+            'install_path' => __DIR__ . '/../../',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
     ),
-    'composer/installers' => 
-    array (
-      'pretty_version' => 'v2.2.0',
-      'version' => '2.2.0.0',
-      'aliases' => 
-      array (
-      ),
-      'reference' => 'c29dc4b93137acb82734f672c37e029dfbd95b35',
-    ),
-    'htmlburger/carbon-fields' => 
-    array (
-      'pretty_version' => 'v3.6.3',
-      'version' => '3.6.3.0',
-      'aliases' => 
-      array (
-      ),
-      'reference' => 'd913a5148cb9dc61ed239719c747f4ebb513003f',
-    ),
-    'htmlburger/carbon-fields-plugin' => 
-    array (
-      'pretty_version' => 'v3.6.3',
-      'version' => '3.6.3.0',
-      'aliases' => 
-      array (
-      ),
-      'reference' => '35e4524835863ff43671f14baecf7f263c16521a',
-    ),
-  ),
 );

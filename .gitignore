@@ -1,0 +1,9 @@
+/.idea/
+/.vscode/
+/node_modules/
+/work/
+/outputs/
+*.log
+*.zip
+.DS_Store
+Thumbs.db

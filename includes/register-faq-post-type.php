@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 function mk_faq_register_post_type() {
 	$labels = array(
 		'name'               => esc_html__( 'FAQ', MK_FAQ_TEXT_DOMAIN ),
@@ -23,8 +27,9 @@ function mk_faq_register_post_type() {
 		'publicly_queryable' => false,
 		'show_ui'            => true,
 		'show_in_menu'       => true,
-		'query_var'          => true,
-		'rewrite'            => array( 'slug' => 'mk-simple-faq' ),
+		'exclude_from_search' => true,
+		'query_var'          => false,
+		'rewrite'            => false,
 		'capability_type'    => 'post',
 		'has_archive'        => false,
 		'hierarchical'       => false,
