@@ -3,7 +3,7 @@
  * Plugin Name:       Simple Customizable FAQ Accordion
  * Plugin URI:        https://github.com/marstamyan/simple-customizable-faq-accordion
  * Description:       Create FAQ groups with accessible accordions and customizable colors and sizes.
- * Version:           1.2.1
+ * Version:           1.2.2
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Mamikon
@@ -22,7 +22,7 @@ if ( ! class_exists( 'SimpleCustomizableFAQAccordion' ) ) {
 	class SimpleCustomizableFAQAccordion {
 		public function __construct() {
 			define( 'MK_FAQ_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
-			define( 'MK_FAQ_VERSION', '1.2.1' );
+			define( 'MK_FAQ_VERSION', '1.2.2' );
 			define( 'MK_FAQ_TEXT_DOMAIN', 'simple-customizable-faq-accordion' );
 		}
 
@@ -39,6 +39,7 @@ if ( ! class_exists( 'SimpleCustomizableFAQAccordion' ) ) {
 			add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts_styles' ) );
 			add_action( 'customize_controls_enqueue_scripts', array( $this, 'admin_enqueue_scripts_styles' ) );
 			add_action( 'customize_preview_init', array( $this, 'enqueue_customizer_preview' ) );
+			add_action( 'wp_enqueue_scripts', array( $this, 'ensure_customizer_dependencies' ), PHP_INT_MAX );
 			add_action( 'admin_notices', array( $this, 'display_mk_simple_faq_message' ) );
 			add_action( 'manage_mk-simple-faq_posts_custom_column', array( $this, 'display_shortcode_column_content' ), 10, 2 );
 			add_filter( 'manage_edit-mk-simple-faq_columns', array( $this, 'add_shortcode_column' ) );
@@ -107,6 +108,14 @@ if ( ! class_exists( 'SimpleCustomizableFAQAccordion' ) ) {
 		public function enqueue_customizer_preview() {
 			// Load early; late or reordered footer assets must not delay the listeners.
 			wp_enqueue_script( 'mk-faq-theme-customizer', plugins_url( 'public/js/mk-faq-theme-customizer.js', __FILE__ ), array( 'customize-preview' ), MK_FAQ_VERSION, false );
+		}
+
+		public function ensure_customizer_dependencies() {
+			// Some custom themes remove the jquery alias, breaking WordPress's
+			// customize-preview dependency chain and every dependent preview script.
+			if ( is_customize_preview() && ! wp_script_is( 'jquery', 'registered' ) && wp_script_is( 'jquery-core', 'registered' ) && wp_script_is( 'jquery-migrate', 'registered' ) ) {
+				wp_register_script( 'jquery', false, array( 'jquery-core', 'jquery-migrate' ), null );
+			}
 		}
 
 		public function allow_page_optimization( $allowed ) {

@@ -19,6 +19,7 @@ const pluginVfs = '/wordpress/wp-content/plugins/simple-customizable-faq-accordi
 const php = process.env.FAQ_TEST_PHP || '8.3';
 const wp = process.env.FAQ_TEST_WP || 'latest';
 const resultFile = process.env.FAQ_TEST_RESULTS;
+const themePath = process.env.FAQ_TEST_THEME;
 let server;
 let browser;
 let page;
@@ -43,8 +44,8 @@ try {
   server = await runCLI({
     command: 'server', port: Number(process.env.FAQ_TEST_PORT || 9482),
     php, wp, workers: Number(process.env.FAQ_TEST_WORKERS || 6), login: false,
-    mount: [{ hostPath: repo, vfsPath: pluginVfs }],
-    blueprint: { steps: [{ step: 'activatePlugin', pluginPath: pluginVfs + '/simple-customizable-faq-accordion.php' }] },
+    mount: [{ hostPath: repo, vfsPath: pluginVfs }, ...(themePath ? [{ hostPath: themePath, vfsPath: '/wordpress/wp-content/themes/lumina' }] : [])],
+    blueprint: { steps: [{ step: 'activatePlugin', pluginPath: pluginVfs + '/simple-customizable-faq-accordion.php' }, ...(themePath ? [{ step: 'activateTheme', themeFolderName: 'lumina' }] : [])] },
     'php-ini': { display_errors: '0', log_errors: '1', error_reporting: '32767' },
     'define-bool': {
       WP_DEBUG: true, WP_DEBUG_LOG: true, WP_DEBUG_DISPLAY: false,
@@ -53,6 +54,10 @@ try {
   });
   const integration = await runPHP(`require '/wordpress/wp-load.php'; require '${pluginVfs}/tests/wordpress-integration.php';`);
   results.integration = JSON.parse(integration);
+  if (themePath) {
+    // Lumina has a single-post template; its page fallback displays excerpts.
+    results.integration.fixture_url = await runPHP(`require '/wordpress/wp-load.php'; wp_update_post(array('ID'=>${results.integration.fixture_page_id},'post_type'=>'post')); echo get_permalink(${results.integration.fixture_page_id});`);
+  }
   console.log(JSON.stringify(results.integration, null, 2));
   assert.equal(results.integration.failed, 0, 'WordPress integration checks must pass');
 

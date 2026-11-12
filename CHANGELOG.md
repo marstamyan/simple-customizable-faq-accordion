@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.2
+
+- Restore the registered WordPress jQuery dependency alias in Customizer previews if a theme removed it, as Lumina does. Normal frontend requests retain the theme's script choices.
+- Use the hover background only while a question is hovered, keeping the normal title background during initialization and for open questions.
+- Allow the browser runner to activate a local Lumina checkout using `FAQ_TEST_THEME`.
+
 ## 1.2.1
 
 - Add a Settings action link on the Installed Plugins screen for users allowed to edit FAQ design settings.

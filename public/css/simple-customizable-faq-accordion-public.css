@@ -81,8 +81,7 @@
     transition: background-color 0.2s ease-in-out;
 }
 
-.mk-faq-container .mk-faq-accordion-title:hover,
-.mk-faq-container .mk-faq-accordion-title.is-expanded {
+.mk-faq-container .mk-faq-accordion-title:hover {
     background-color: var(--mk-faq-title-hover-color);
 }
 

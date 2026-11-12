@@ -38,9 +38,13 @@ Live preview applies design variables directly to FAQ containers, including FAQ 
 
 Custom themes must call `wp_head()` before `</head>` and `wp_footer()` before `</body>`. WordPress itself prints the Customizer's connection settings in the footer; missing theme hooks can prevent the entire preview connection from initializing. FAQ → Settings remains available without using the Customizer.
 
+Themes must also preserve WordPress's registered script dependencies. Version 1.2.2 restores the `jquery` alias inside Customizer previews when a theme removes it; WordPress's own preview runtime depends on this alias. The hover background applies only while hovering, including before accordion JavaScript initializes.
+
 Appearance settings belong to the active theme, matching the original plugin. Switching themes uses that theme's settings. Existing setting and FAQ data keys have been preserved. The default question text is now dark for better contrast on the green background; explicitly saved colors remain unchanged.
 
 ## Development and testing
+
+Version 1.2.2 was also tested with the original [Lumina theme](https://github.com/marstamyan/lumina) (commit `1d94b4d`): all 28 WordPress checks, 26 shortcode checks and 13 browser scenarios passed, including the pencil, live color/size changes and publishing. PHP debug output and uncaught JavaScript errors were absent. A separate browser check confirmed that initial/open questions use the normal background and pointer hover uses the hover background.
 
 Version 1.2.0 passed 28 WordPress integration checks, 26 shortcode checks and 13 browser scenarios on WordPress 7.1.4 / PHP 8.3.36. New scenarios verify admin saves, invalid nonce rejection, settings shared with the Customizer, the edit pencil and live changes despite a later conflicting stylesheet. The PHP debug log and uncaught JavaScript error list were empty.
 
@@ -55,7 +59,7 @@ Dependencies are locked in `composer.lock`. To refresh the bundled production li
 To build an installable package on Windows:
 
 ```powershell
-./tools/build-plugin.ps1 -Destination ../outputs/simple-customizable-faq-accordion-1.2.1.zip
+./tools/build-plugin.ps1 -Destination ../outputs/simple-customizable-faq-accordion-1.2.2.zip
 ```
 
 ## Support and license

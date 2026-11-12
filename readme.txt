@@ -3,7 +3,7 @@ Contributors: marstamyan
 Tags: faq, accordion, shortcode
 Requires at least: 6.0
 Requires PHP: 7.4
-Stable tag: 1.2.1
+Stable tag: 1.2.2
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -38,6 +38,10 @@ Open FAQ → Settings to edit and save the design in the admin area, or FAQ → 
 No. Version 1.1.0 retains the existing FAQ post type, Carbon Fields field names and theme modification names. Back up the site before any plugin update.
 
 == Changelog ==
+
+= 1.2.2 =
+* Restore the WordPress jQuery dependency alias in Customizer previews if a theme removed it.
+* Apply the title hover background only on hover, preventing a color flash during initialization.
 
 = 1.2.1 =
 * Add a Settings link below the plugin name on the Installed Plugins screen.

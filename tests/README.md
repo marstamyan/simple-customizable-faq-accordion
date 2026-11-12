@@ -49,6 +49,7 @@ Optional environment variables:
 | `FAQ_TEST_PORT` | Local HTTP port, default `9482` |
 | `FAQ_TEST_WORKERS` | PHP workers, default `6` (Playground recommendation) |
 | `FAQ_TEST_RESULTS` | Absolute path for JSON results, including PHP/WP versions and failures |
+| `FAQ_TEST_THEME` | Optional absolute path to a Lumina checkout; mounts and activates that theme, using a single post for the FAQ fixture |
 
 Network access is needed to download WordPress and test dependencies. The runner
 mounts this repository as a plugin in a fresh test site, activates it, runs the
